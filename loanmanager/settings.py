@@ -26,6 +26,7 @@ SECRET_KEY = config.get('App', 'SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config.getboolean('App', 'DEBUG')
+LOCAL_DATABASE = config.getboolean('App', 'LOCAL_DATABASE')
 
 ALLOWED_HOSTS = [
     'localhost',
@@ -87,7 +88,7 @@ DATABASES = {
     }
 }
 
-if not DEBUG:
+if not LOCAL_DATABASE:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
