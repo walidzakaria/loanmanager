@@ -30,6 +30,7 @@ DEBUG = config.getboolean('App', 'DEBUG')
 ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
+    '64.23.217.201',
 ]
 
 
