@@ -16,8 +16,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.utils.translation import activate
 
 admin.site.site_header = 'Loan Manager'
+# admin.site = activate('ar')(admin.site)
+
 
 urlpatterns = [
     path('', admin.site.urls),
