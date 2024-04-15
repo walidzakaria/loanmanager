@@ -48,14 +48,16 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    
+    'django.contrib.messages.middleware.MessageMiddleware',
+    # 'corsheaders.middleware.CorsMiddleware',
+    # 'django_user_agents.middleware.UserAgentMiddleware',    
 ]
 
 ROOT_URLCONF = 'loanmanager.urls'
