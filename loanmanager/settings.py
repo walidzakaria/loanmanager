@@ -22,13 +22,15 @@ config.read(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'settings.i
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-y&=6c$3!32s%_n(mmmh(oiyu88uogjx($eh^rw!-@#r*30_s=d'
 SECRET_KEY = config.get('App', 'SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config.getboolean('App', 'DEBUG')
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+]
 
 
 # Application definition
@@ -88,9 +90,9 @@ if not DEBUG:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': config("DB_NAME"),
-            'USER': config("DB_USER"),
-            'PASSWORD': config("DB_PASSWORD"),
+            'NAME': config.get('Database', 'NAME'),
+            'USER': config.get('Database', 'USER'),
+            'PASSWORD': config.get('Database', 'PASSWORD'),
             'HOST': 'localhost',
             'PORT': '',
         },
