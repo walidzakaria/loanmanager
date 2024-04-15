@@ -16,7 +16,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from django.utils.translation import activate
+# from django.utils.translation import activate
+from django.conf import settings
+from django.conf.urls.static import static
 
 admin.site.site_header = 'Loan Manager'
 # admin.site = activate('ar')(admin.site)
@@ -24,4 +26,4 @@ admin.site.site_header = 'Loan Manager'
 
 urlpatterns = [
     path('', admin.site.urls),
-]
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
