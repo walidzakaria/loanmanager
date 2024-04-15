@@ -76,7 +76,7 @@ class Loan(models.Model):
             Decimal('.01'), ROUND_HALF_UP)
         self.collected = installment_amount
         self.amount_to_deliver = self.amount - self.fees - installment_amount
-        
+        super().save(*args, **kwargs)
         for i in range(1, self.duration + 1):
             new_date = self.start_date + relativedelta(months=(i - 1))
             installment = Installment(loan=self, date=new_date, amount=installment_amount)
@@ -84,7 +84,6 @@ class Loan(models.Model):
                 installment.collector = self.collector
                 installment.paid = True
             installment.save()
-        super().save(*args, **kwargs)
 
 
 class Installment(models.Model):
