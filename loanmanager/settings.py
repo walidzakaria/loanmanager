@@ -56,6 +56,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     # 'corsheaders.middleware.CorsMiddleware',
     # 'django_user_agents.middleware.UserAgentMiddleware',    
 ]
@@ -147,7 +148,9 @@ LANGUAGES = [
 ]
 LANGUAGE_CODE = 'en'
 
-USE_TZ = True
+USE_I18N = True
+USE_L10N = True
+
 LOCALE_PATHS = (Path.joinpath(BASE_DIR, 'locale'), )
 
 # Static files (CSS, JavaScript, Images)
