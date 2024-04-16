@@ -56,7 +56,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    
+    'django.middleware.locale.LocaleMiddleware',
     # 'corsheaders.middleware.CorsMiddleware',
     # 'django_user_agents.middleware.UserAgentMiddleware',    
 ]
