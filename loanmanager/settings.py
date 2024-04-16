@@ -143,10 +143,10 @@ TIME_ZONE = 'Egypt'
 USE_I18N = True
 
 LANGUAGES = [
-    ('en', 'English'),
+    # ('en', 'English'),
     ('ar', 'Arabic'),
 ]
-LANGUAGE_CODE = 'en'
+LANGUAGE_CODE = 'ar'
 
 USE_I18N = True
 USE_L10N = True

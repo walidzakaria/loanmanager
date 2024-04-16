@@ -4,61 +4,72 @@ from datetime import datetime
 from dateutil.relativedelta import relativedelta
 from django.db.models import Sum
 
+from .utils import get_arabic_month_name
 # Create your models here.
 class Shareholder(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, verbose_name='الاسم')
     
     def __str__(self):
         return self.name
     
     class Meta:
         ordering = ('name', )
+        verbose_name = 'شريك'
+        verbose_name_plural = 'شركاء'
 
 
 class Collector(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, verbose_name='الاسم')
 
     def __str__(self):
         return self.name
 
     class Meta:
         ordering = ('name', )
+        verbose_name = 'محصل'
+        verbose_name_plural = 'محصلون'
 
 
 class Customer(models.Model):
-    name = models.CharField(max_length=100)
-    address = models.TextField(max_length=400, blank=True, null=True)
+    name = models.CharField(max_length=100, verbose_name='الاسم')
+    address = models.TextField(max_length=400, blank=True, null=True, verbose_name='العنوان')
 
     def __str__(self):
         return self.name
     
     class Meta:
         ordering = ('name', )
+        verbose_name = 'عميل'
+        verbose_name_plural = 'عملاء'
 
 
 class Loan(models.Model):
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='loan_customer')
-    guarantor1 = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='loan_guarantor1')
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='loan_customer', verbose_name='العميل')
+    guarantor1 = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='loan_guarantor1', verbose_name='الضامن الأول')
     guarantor2 = models.ForeignKey(
         Customer, on_delete=models.CASCADE, related_name='loan_guarantor2',
-        null=True, blank=True
+        null=True, blank=True,
+        verbose_name='الضامن الثاني'
         )
-    amount = models.DecimalField(decimal_places=2, max_digits=10)
-    duration = models.PositiveIntegerField()
-    interest = models.DecimalField(decimal_places=2, max_digits=10)
-    start_date = models.DateField()
-    shareholder = models.ForeignKey(Shareholder, on_delete=models.CASCADE)
-    collector = models.ForeignKey(Collector, on_delete=models.CASCADE)
-    collected = models.DecimalField(decimal_places=2, max_digits=10, default=0.00, editable=False)
-    amount_to_deliver = models.DecimalField(decimal_places=2, max_digits=10, editable=False)
-    fees = models.DecimalField(decimal_places=2, max_digits=10, default=0.00, editable=False)
-    amount_with_interest = models.DecimalField(decimal_places=2, max_digits=10, editable=False)
+    amount = models.DecimalField(decimal_places=2, max_digits=10, verbose_name='القيمة')
+    duration = models.PositiveIntegerField(verbose_name='المدة',)
+    interest = models.DecimalField(decimal_places=2, max_digits=10, verbose_name='الفائدة')
+    start_date = models.DateField(verbose_name='تاريخ البدء')
+    shareholder = models.ForeignKey(Shareholder, on_delete=models.CASCADE, verbose_name='الشريك')
+    collector = models.ForeignKey(Collector, on_delete=models.CASCADE, verbose_name='المحصل')
+    collected = models.DecimalField(decimal_places=2, max_digits=10, default=0.00, editable=False, verbose_name='المبلغ المحصل')
+    amount_to_deliver = models.DecimalField(decimal_places=2, max_digits=10, editable=False, verbose_name='المبلغ المسلم')
+    fees = models.DecimalField(decimal_places=2, max_digits=10, default=0.00, editable=False, verbose_name='الرسوم الإدارية')
+    amount_with_interest = models.DecimalField(decimal_places=2, max_digits=10, editable=False, verbose_name='القيمة بالفائدة')
     STATUS = (
-        ('Active', 'Active'),
-        ('Closed', 'Closed'),
+        ('Active', 'نشط'),
+        ('Closed', 'مغلق'),
     )
-    status = models.CharField(max_length=6, choices=STATUS, default='Active')
+    status = models.CharField(max_length=6, choices=STATUS, default='Active', verbose_name='الحالة')
 
+    class Meta:
+        verbose_name = 'قرض'
+        verbose_name_plural = 'قروض'
     
     def __str__(self):
         return f'{self.customer.name} ({self.amount})'
@@ -87,16 +98,16 @@ class Loan(models.Model):
 
 
 class Installment(models.Model):
-    loan = models.ForeignKey(Loan, on_delete=models.CASCADE, related_name='loan_installment')
-    date = models.DateField()
-    amount = models.DecimalField(decimal_places=2, max_digits=10)
-    paid = models.BooleanField(default=False)
-    collector = models.ForeignKey(Collector, on_delete=models.CASCADE, blank=True, null=True)
-    month = models.CharField(max_length=20, editable=False)
-    year = models.PositiveIntegerField(editable=False)
+    loan = models.ForeignKey(Loan, on_delete=models.CASCADE, related_name='loan_installment', verbose_name='')
+    date = models.DateField(verbose_name='التاريخ')
+    amount = models.DecimalField(decimal_places=2, max_digits=10, verbose_name='المدفوع')
+    paid = models.BooleanField(default=False, verbose_name='تم الدفع')
+    collector = models.ForeignKey(Collector, on_delete=models.CASCADE, blank=True, null=True, verbose_name='المحصل')
+    month = models.CharField(max_length=20, editable=False, verbose_name='الشهر')
+    year = models.PositiveIntegerField(editable=False, verbose_name='السنة')
     
     def save(self, *args, **kwargs):
-        self.month = self.date.strftime('%B')
+        self.month = get_arabic_month_name(self.date)
         self.year = self.date.strftime('%Y')
         
         if self.pk is not None:
@@ -122,4 +133,6 @@ class Installment(models.Model):
     
     class Meta:
         ordering = ('date', )
+        verbose_name = 'قسط'
+        verbose_name_plural = 'أقساط'
 
