@@ -30,8 +30,8 @@ class LoanAdmin(admin.ModelAdmin):
 
 class InstallmentAdmin(admin.ModelAdmin):
     list_display = ('id', 'loan', 'date', 'amount', 'paid', 'collector', 'month', 'year', )
-    list_filter = ('paid', 'collector', 'month', 'year', )
-    readonly_fields = ('month', 'year', )
+    list_filter = ('paid', 'collector', 'month', 'year', 'day', )
+    readonly_fields = ('month', 'year', 'day', 'commission', )
 
 
 admin.site.register(Shareholder)
