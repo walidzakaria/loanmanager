@@ -148,4 +148,3 @@ class Installment(models.Model):
         ordering = ('date', )
         verbose_name = 'قسط'
         verbose_name_plural = 'أقساط'
-
